@@ -3,20 +3,7 @@ class Usuario{
         this.nombre=nombre
         this.apellido=apellido
         this.libros=libros
-        this.mascotas=mascotas
-
-/*         if(!libros){
-            this.libros=[]
-        }else{
-            this.libros=[JSON.parse(libros)]
-        }
-
-        if(!mascotas){
-            this.mascotas=[]
-        }else{
-            this.mascotas=mascotas
-        } */
-        
+        this.mascotas=mascotas        
     }
 
     getFullName(){
@@ -36,7 +23,7 @@ class Usuario{
     }
 
     getBookNames(){
-        return this.libros.map(libro=>libro.Nombre)
+        return this.libros.map(libro=>libro.nombre)
     }
 }
 
@@ -48,6 +35,7 @@ usr3=new Usuario('Carlos','Rodriguez',[{'nombre':'El patron Bitcoin', 'autor':'S
 
 usr1.addBook('Harry Potter y la Piedra Filosofal', 'J.K. Rowling')
 usr1.addMascota('Baltazar')
-usr1.getFullName()
-usr1.countMascotas()
-usr1.getBookNames()
+
+console.log(usr1.getFullName())
+console.log(usr1.countMascotas())
+console.log(usr1.getBookNames())
