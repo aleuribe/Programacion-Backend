@@ -1,9 +1,11 @@
 class Usuario{
-    constructor(nombre, apellido, libros, mascotas){
+    constructor(nombre, apellido, libros=[], mascotas=[]){
         this.nombre=nombre
         this.apellido=apellido
+        this.libros=libros
+        this.mascotas=mascotas
 
-        if(!libros){
+/*         if(!libros){
             this.libros=[]
         }else{
             this.libros=[JSON.parse(libros)]
@@ -13,7 +15,7 @@ class Usuario{
             this.mascotas=[]
         }else{
             this.mascotas=mascotas
-        }
+        } */
         
     }
 
@@ -30,7 +32,6 @@ class Usuario{
     }
 
     addBook(nombreLibro, autorLibro){
-        console.log(`{"nombre":"${nombreLibro}", "autor":"${autorLibro}"}`)
         this.libros.push(JSON.parse(`{"nombre":"${nombreLibro}", "autor":"${autorLibro}"}`))
     }
 
@@ -41,6 +42,12 @@ class Usuario{
 
 usr1=new Usuario('Pedro','Perez')
 
-usr2=new Usuario('Juan','Marquez','{"nombre":"El senor de los anillos", "autor":"JRR Tolkien"}')
+usr2=new Usuario('Juan','Marquez',[{'nombre':'El senor de los anillos', 'autor':'JRR Tolkien'}])
 
-usr3=new Usuario('Carlos','Rodriguez','{"nombre":"El patron Bitcoin", "autor":"Saiffedean Ammous"}',['Flopy', 'Bestia'] )
+usr3=new Usuario('Carlos','Rodriguez',[{'nombre':'El patron Bitcoin', 'autor':'Saiffedean Ammous'},{'nombre':'La biblia', 'autor':'Dios'}],['Flopy', 'Bestia'])
+
+usr1.addBook('Harry Potter y la Piedra Filosofal', 'J.K. Rowling')
+usr1.addMascota('Baltazar')
+usr1.getFullName()
+usr1.countMascotas()
+usr1.getBookNames()
