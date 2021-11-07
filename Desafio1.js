@@ -19,7 +19,7 @@ class Usuario{
     }
 
     addBook(nombreLibro, autorLibro){
-        this.libros.push(JSON.parse(`{"nombre":"${nombreLibro}", "autor":"${autorLibro}"}`))
+        this.libros.push({'nombre':nombreLibro, 'autor':autorLibro})
     }
 
     getBookNames(){
