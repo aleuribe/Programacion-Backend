@@ -8,7 +8,7 @@ const PORT = 8080
 const cc = new Contenedor('libros.txt')
 let productos = []
 
-const server = app.listen(PORT, () => {
+const server = app.listen(process.env.PORT || PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
     productos = cc.query()
 })
