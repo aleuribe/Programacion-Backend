@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "npm Desafio3.js",
+    "start": "node Desafio3.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
