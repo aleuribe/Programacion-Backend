@@ -1,0 +1,1 @@
+[{"title":"El senor de los anillos","price":"120","thumbnail":"http://aws/s3/img1.png","id":0},{"title":"Harry Potter y la Piedra Filosofal","price":"220","thumbnail":"http://aws/s3/img2.png","id":1},{"title":"El patron Bitcoin","price":"300","thumbnail":"http://aws/s3/img3.png","id":2}]
