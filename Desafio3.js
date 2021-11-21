@@ -24,3 +24,10 @@ app.get('/productoRandom', (request, response) => {
     const item = productos[Math.random()*productos.length | 0]
     response.send(item)
 })
+
+app.get('/', (request,response) => {
+    response.send(`
+    <h1>Bienvenido al Desafio 3 de Alejandro Uribe :)</h1>
+    <p>Pruebe a navegar a la ruta /productos para obtener la lista completa de productos</p>
+    <p>O navegue a la ruta /productoRandom para obtener uno aleatorio`)
+})
