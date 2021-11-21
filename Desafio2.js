@@ -1,120 +1,4 @@
-const fs = require('fs')
-
-class Contenedor {
-    constructor(nombreArchivo) {
-        this.archivo=nombreArchivo
-        this.id=0
-    }
-    async save(objeto){
-        //Recibe un objeto, lo guarda en el archivo, devuelve el ID asignado. Se incorpora un ID numerico, debera ser siempre +1 que el anterior y no puede estar repetido.
-
-        let listaObjetos = []
-
-        //Primero, leemos el archivo para poder controlar el metodo append y el ID
-        try{
-            const contenido = await fs.promises.readFile(this.archivo,'utf-8')
-            console.log('El archivo pudo ser leido correctamente')
-            listaObjetos = JSON.parse(contenido)
-        }catch(err) {
-            console.log('No se pudo leer archivo ' + err)
-        }
-        
-
-        //Obtenemos el maximo ID en la lista de objetos del archivo
-        const idMax = Math.max(...listaObjetos.map(item => item.id))
-
-        if (idMax>=0) {
-            this.id = idMax
-            this.id++
-        }
-
-        const objetoAGuardar = {
-            ...objeto,
-            id:this.id
-        }
-
-        listaObjetos.push(objetoAGuardar)
-
-        //Escribimos en el archivo
-        try{
-            await fs.promises.writeFile(this.archivo,JSON.stringify(listaObjetos))
-            console.log('Se escribio correctamente')
-        } catch (err) {
-            console.log('no se pudo escribir el archivo ' + err)
-        }
-
-    }
-
-    async getByID(id){
-        //Recibe un ID, devuelve el objeto con ese ID o null si no esta
-
-        let listaObjetos = [], item
-
-        try{
-            const resultado = await fs.promises.readFile(this.archivo,'utf-8')
-                listaObjetos = JSON.parse(resultado)
-                item = listaObjetos.filter(lista => lista.id==id)
-                console.log(item)  //Si no coloco el console.log aqui, no tengo resultado
-                return item
-                
-        }catch(err){
-            console.log('No se pudo leer archivo '+err)
-        }
-    }
-
-    async getAll(){
-        let listaObjetos = []
-        //Devuelve un array con los objetos presentes en el archivo
-        try {
-            const contenido = await fs.promises.readFile(this.archivo,'utf-8')
-            console.log('El archivo pudo ser leido correctamente')
-            listaObjetos = JSON.parse(contenido)
-            console.log(listaObjetos) //Si no coloco el console.log aqui, no tengo resultado
-            return listaObjetos
-        }catch(err) {
-            console.log('No se pudo leer archivo' + err)
-        }
-    }
-
-    async deleteByID(id){
-        //Elimina del archivo el objeto con el ID buscado
-
-        let listaObjetos = []
-
-        //Primero, leemos el archivo para poder controlar el metodo append y el ID
-        try {
-            const contenido = await fs.promises.readFile(this.archivo,'utf-8')
-                console.log('El archivo pudo ser leido correctamente')
-                listaObjetos = JSON.parse(contenido)
-        }catch (err){
-            console.log('No se pudo leer archivo '+ err)
-        }
-        
-        //Borramos el objeto buscado por id
-        listaObjetos = listaObjetos,filter(obj => obj.id != id)
-
-        console.log(listaObjetos)
-
-        //Ahora escribimos el file
-        try {
-            await fs.promises.writeFile(this.archivo,JSON.stringify(listaObjetos))
-            console.log('se escribio correctamente')
-        }catch(err){
-            console.log('no se pudo escribir el archivo ' + err)
-            }    
-    }
-
-    async deleteAll(){
-
-        try {
-            await fs.promises.writeFile(this.archivo,'')
-            console.log('se borro correctamente' + resultado)
-        }catch(err){
-            console.log('no se pudo escribir el archivo ' + err)
-            }
-        }
-}
-
+const Contenedor = require('./Contenedor.js')
 
 class Libro {
     constructor(title,price,thumbnail){
@@ -124,39 +8,52 @@ class Libro {
     }
 }
 
-//Ejecucion
-const libro1=new Libro('El senor de los anillos','120','http://aws/s3/img1.png')
-const libro2=new Libro('Harry Potter y la Piedra Filosofal','220','http://aws/s3/img2.png')
-const libro3=new Libro('El patron Bitcoin','300','http://aws/s3/img3.png')
+const run = async function () {
+    const cc = new Contenedor('libros.txt')
+    await cc.query()
 
-const contenedor1 = new Contenedor('libros.txt')
+    //Ejecucion
+    //1. Generamos los objetos con libros de ejemplo
+    const libro1=new Libro('El senor de los anillos','120','http://aws/s3/img1.png')
+    const libro2=new Libro('Harry Potter y la Piedra Filosofal','220','http://aws/s3/img2.png')
+    const libro3=new Libro('El patron Bitcoin','300','http://aws/s3/img3.png')
 
-setTimeout( () => {
-    contenedor1.save(libro1)
+    //2. Probamos el metodo save()
+    console.log('*********************************')
+    console.log(`Funcion save():`)
+    console.log(`Guardando libro ${await cc.save(libro1)}`)
+    console.log(`Guardando libro ${await cc.save(libro2)}`)
+    console.log(`Guardando libro ${await cc.save(libro3)}`)
 
-    setTimeout( () => {
-        contenedor1.save(libro2)
+    //3. Probamos el metodo getAll()
+    let lista = cc.getAll()
+    console.log('*********************************')
+    console.log(`Funcion getAll(): tenemos ${lista.length} libros en la lista.`)
+    console.log(lista)
 
-        setTimeout( () => {
-            contenedor1.save(libro3)
+    //4. Probamos el metodo getByID()
+    console.log('*********************************')
+    console.log(`Funcion getByID(1): Se obtiene el objeto con id 1`)
+    console.log(cc.getByID(1))
+    console.log(`Busquemos un objeto inexistente a ver que pasa, por ejemplo el 9999:`)
+    console.log(cc.getByID(9999))
 
-            setTimeout( () => {
-                contenedor1.getByID(1)
-                setTimeout( () => {
-                    contenedor1.getAll()
-                }, 1500)
-            }, 1500)
-        }, 1500)
-    }, 1500)
-}, 1500)
+    //5. Probamos el metodo deleteByID()
+    console.log('*********************************')
+    console.log(`Funcion deleteByID(1): Se va a eliminar el objeto con id 1`)
+
+    console.log(`Teniamos ${await cc.getAll().length} elementos`)
+    await cc.deleteByID(1)
+    console.log(`Ahora tenemos ${await cc.getAll().length} elementos, a continuacion:`)
+    console.log(cc.getAll())
+    
+    //6. Probamos el metodo deleteAll()
+    console.log('*********************************')
+    console.log(`Funcion deleteAll(): Se van a borrar todos los elementos`)
+    await cc.deleteAll()
+    console.log(`Ahora tenemos ${await cc.getAll().length} elementos, a continuacion:`)
+    console.log(cc.getAll())
+}
 
 
-
-
-
-
-
-
-
-
-
+run()
