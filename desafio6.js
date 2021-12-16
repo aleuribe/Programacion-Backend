@@ -1,3 +1,4 @@
+const fs = require('fs')
 const express = require('express')
 const Contenedor = require('./libs/Contenedor.js')
 const {Router} = express
@@ -77,8 +78,20 @@ io.on("connection", (socket) => {
     socket.on("newMessage", data => {
         messages.push(data)
         io.sockets.emit("messages", messages)
+
+        write()
+
     })
 })
+
+async function write(){
+    try{
+        await fs.promises.writeFile('chat.txt',JSON.stringify(messages))
+
+    } catch (err) {
+        console.log('no se pudo escribir el archivo ' + err)
+    }
+}
 
 //Manejador de errores
 app.use(function(err,req,res,next){
