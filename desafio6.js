@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 const messages = [
-    {author: 'System@ofADown.com', text: 'Bienvenido al server'}
+    {author: 'System@ofADown.com', text: 'Bienvenido al server 😈', datetime: '06/06/6666, 06:06:06'}
 ]
 
 //Set template engine
