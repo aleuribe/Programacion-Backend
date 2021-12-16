@@ -2,10 +2,12 @@ const socket = io.connect()
 
 function render(data){
     const html = data.map((elem, index) => {
+        let datetime = new Date().toLocaleString('en-GB', {timezone: 'UTC'})
         return(
             `<div>
-                <strong> ${elem.author}: </strong>
-                <em> ${elem.text} </em>
+                <strong style="color: blue"> ${elem.author}: </strong>
+                <span style="color: brown"> [${datetime}] </span>
+                <em style="color: green"> ${elem.text} </em>
             </div>`
         )
         }).join(' ')
@@ -18,6 +20,7 @@ function sendMessage(e) {
         text: document.getElementById('text').value
     }
     socket.emit('newMessage', mensaje)
+    document.getElementById('text').value=''
     return false
 }
 

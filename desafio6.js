@@ -15,22 +15,14 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 const messages = [
-    {author: 'Ale', text: 'Prueba'}
+    {author: 'System@ofADown.com', text: 'Bienvenido al server'}
 ]
-let contadorVisitas = 0
 
 //Set template engine
 app.set('views', './views')
 app.set('view engine', 'ejs')
 
 const libreria = new Contenedor(__dirname + '/data/productos.json')
-
-//Para contabilizar las visitas y procesar fecha hora
-app.use(function(req,res,next) {
-    console.log('Fecha: ', Date.now())
-    contadorVisitas++
-    next()
-})
 
 //Devuelve todos los productos: GET /api/productos
 router.get("/", (req, res) => {
@@ -87,7 +79,6 @@ io.on("connection", (socket) => {
         io.sockets.emit("messages", messages)
     })
 })
-
 
 //Manejador de errores
 app.use(function(err,req,res,next){
