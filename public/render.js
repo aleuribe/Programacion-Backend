@@ -16,14 +16,17 @@ function render(data){
 
 //Render de list
 //Me traigo los productos con fetch
-fetch('/api/productos')
+function fetchProducts() {
+    fetch('/api/productos')
     .then( response => response.json())
     .then(data => {
         libros=data
         renderList(libros)
     })
+}
 
 function renderList(data) {
+    $("#list").html("")
     data.forEach(function(libro){
         $("#list").prepend(
             `
@@ -36,3 +39,5 @@ function renderList(data) {
     })
 
 }
+
+fetchProducts()

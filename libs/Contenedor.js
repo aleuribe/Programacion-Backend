@@ -65,6 +65,16 @@ class Contenedor {
         }
 
     }
+
+    async write(){
+        try{
+            console.log(this.filename)
+            await fs.promises.writeFile(this.filename,JSON.stringify(this.list))
+
+        } catch (err) {
+            console.log('no se pudo escribir el archivo ' + err)
+        }
+    }
 }
 
 module.exports = Contenedor

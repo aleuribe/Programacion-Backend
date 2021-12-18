@@ -37,6 +37,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
     let obj = req.body
     libreria.insert(obj)
+    libreria.write()
     return res.redirect('/')
 })
 
@@ -44,13 +45,17 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
     let obj = req.body
     let id = req.params.id
-    return res.json(libreria.update(id,obj))
+    let put = res.json(libreria.update(id,obj))
+    libreria.write()
+    return put
 })
 
 //Elimina un producto segun su ID
 router.delete("/:id", (req,res) => {
     let id = req.params.id
-    return(res.json(libreria.delete(id)))
+    let deleted = res.json(libreria.delete(id))
+    libreria.write()
+    return(deleted)
 })
 
 app.use('/api/productos', router)
@@ -60,7 +65,7 @@ app.get('/', (req, res) => {
     return res.render('ejs/index', libreria)
 })
 
-//Websockets
+//Listening
 const server = app.listen(process.env.PORT || PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
 })
@@ -84,6 +89,7 @@ io.on("connection", (socket) => {
 
     socket.on("newProduct", data => {
         libreria.insert(data)
+        libreria.write()
         io.sockets.emit("products", data)
     })
 

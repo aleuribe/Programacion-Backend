@@ -33,5 +33,5 @@ $("#form").submit( function(e) {
 
 //Escucho nuevos cambios del socket products y vuelvo a cargar listado
 socket.on('products', data => {
-    renderList([data])
+    fetchProducts()
 })
