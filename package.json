@@ -4,6 +4,7 @@
   "description": "",
   "main": "desafio6.js",
   "scripts": {
+    "start": "node desafio6.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
