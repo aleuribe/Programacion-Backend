@@ -10,7 +10,7 @@ function sendMessage(e) {
         datetime: datetime
     }
     socket.emit('newMessage', mensaje)
-    $("text").value=''
+    $("#text").val("")
     return false
 }
 
@@ -18,8 +18,8 @@ socket.on('messages', data => {
     render(data)
 })
 
-//Para el form
-//Emito cuando haga click en submit
+//Para el form de ingreso de datos
+//Emito cuando haga click en Guardar
 $("#form").submit( function(e) {
     e.preventDefault()
     data = {
