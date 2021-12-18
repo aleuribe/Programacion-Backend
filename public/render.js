@@ -14,14 +14,12 @@ function render(data){
         document.getElementById('messages').innerHTML=html
 }
 
-
 //Render de list
 //Me traigo los productos con fetch
 fetch('/api/productos')
     .then( response => response.json())
     .then(data => {
         libros=data
-        console.log(libros)
         renderList(libros)
     })
 

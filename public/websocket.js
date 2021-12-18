@@ -1,6 +1,5 @@
 const socket = io.connect()
 
-
 //Para el chat
 function sendMessage(e) {
     let datetime = new Date().toLocaleString('en-GB', {timezone: 'UTC'})
@@ -34,6 +33,5 @@ $("#form").submit( function(e) {
 
 //Escucho nuevos cambios del socket products y vuelvo a cargar listado
 socket.on('products', data => {
-    console.log(data)
     renderList([data])
 })

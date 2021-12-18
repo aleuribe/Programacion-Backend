@@ -71,6 +71,7 @@ const io = require('socket.io')(server)
 io.on("connection", (socket) => {
     let currentTime = new Date().toLocaleTimeString()
     console.log(`${currentTime} New user connected`)
+
     socket.emit('messages', messages)
 
     //Para emitir los mensajes que llegan y sea broadcast
@@ -85,6 +86,7 @@ io.on("connection", (socket) => {
         libreria.insert(data)
         io.sockets.emit("products", data)
     })
+
 })
 
 async function write(){
