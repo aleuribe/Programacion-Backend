@@ -1,89 +1,35 @@
 <%- include('head.ejs') %>
-<body>
+    <!--Formulario de ingreso de libros-->
     <div class="alert alert-primary" role="alert">
         Formulario de ingreso de libros
     </div>
-    <!--Form-->
+
     <div class="card">
         <div class="card-header">
             Ingrese los datos del libro
         </div>
     
-        <div class="card-body">
-            <form action="/api/productos" method="post">
-                <div class="row mb-3">
-                    <input type="text" class="form-control" placeholder="Titulo" name="title">
-                </div>
-    
-                <div class="row mb-3">
-                    <input type="number" class="form-control" placeholder="Precio" name="price">
-                </div>
-                
-                <div class="row mb-3">
-                    <input type="text" class="form-control" placeholder="URL de la portada" name="thumbnail">
-                </div>
-                
-                <input type="submit" class="btn btn-primary" value="Guardar">
-                <!-- <a href="/list" class="btn btn-secondary">Ver listado</a> -->
-            </form>
-        </div>
-        
+        <%- include('form.ejs') %>    
     </div>
+
+    <!--Listado de libros-->
     <div class="alert alert-warning" role="alert">
         Listado de libros cargados
     </div>
-    <!--List-->
-    <% if (list.lenght == 0) { %>
-        <h2>No hay libros</h2>
-    <% } else { %>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Titulo</td>
-                    <th scope="col">Precio</td>
-                    <th scope="col">Thumbnail</td>
-                </tr>
-            </thead>
-            <tbody>
-                <% list.forEach(function(libro) { %>
-                    <tr>
-                        <td><%= libro.title %></td>
-                        <td><%= libro.price %></td>
-                        <td><img src="<%= libro.thumbnail %>" class="img-thumbnail" width="100px" alt="No image"></td>
-                    </tr>
-                <% }) %>
 
-            </tbody>
-        </table>
-    <% } %>
+    <%- include('listv2.ejs') %>
 
-    <!-- <div class="mb-3">
-        <a href="/" class="btn btn-primary">Ingresar nuevo libro</a>
-    </div> -->
 
     <div class="alert alert-success" role="alert">
         CHAT
     </div>
 
     <!--Chat-->
-    <div class="card-body">
-        <div id="messages"></div>
-
-        <form onsubmit="return sendMessage(this)">
-        
-            <div class="row mb-3">
-                <input type="email" class="form-control" id="username" placeholder="Email del usuario" required>
-            </div>
-            
-            <div class="row mb-3">
-                <input type="text" class="form-control" id="text" placeholder="Escriba el mensaje que desea enviar">
-            </div>
-            <input type="submit" class="btn btn-primary" value="Enviar">
-        
-        </form>
+    <div class="card-header">
+        Usuarios online:
     </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="websocket.js"></script>
-</body>
-
-</html>
+    <div class="card-body">
+        <%- include('chat.ejs') %>
+    </div>
+    
+<%- include('foot.ejs') %>

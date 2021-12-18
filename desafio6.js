@@ -6,9 +6,6 @@ const router = Router()
 
 const app = express()
 
-//const httpServer = new HttpServer(app)
-//const io = new IOServer(httpServer)
-
 const PORT = 8080
 
 app.use(express.static('./public'))
@@ -27,7 +24,7 @@ const libreria = new Contenedor(__dirname + '/data/productos.json')
 
 //Devuelve todos los productos: GET /api/productos
 router.get("/", (req, res) => {
-    return res.render(libreria.list)
+    return res.json(libreria.list)
 })
 
 //Devuelve un producto segun su ID: GET /api/productos/:id
@@ -50,6 +47,7 @@ router.put("/:id", (req, res) => {
     return res.json(libreria.update(id,obj))
 })
 
+//Elimina un producto segun su ID
 router.delete("/:id", (req,res) => {
     let id = req.params.id
     return(res.json(libreria.delete(id)))
@@ -57,16 +55,17 @@ router.delete("/:id", (req,res) => {
 
 app.use('/api/productos', router)
 
+//Main
 app.get('/', (req, res) => {
     return res.render('ejs/index', libreria)
 })
 
-//Websocket
-
+//Websockets
 const server = app.listen(process.env.PORT || PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
 })
 
+//Websocket para el chat
 const io = require('socket.io')(server)
 
 io.on("connection", (socket) => {
@@ -80,13 +79,17 @@ io.on("connection", (socket) => {
         io.sockets.emit("messages", messages)
 
         write()
+    })
 
+    socket.on("newProduct", data => {
+        libreria.insert(data)
+        io.sockets.emit("products", data)
     })
 })
 
 async function write(){
     try{
-        await fs.promises.writeFile('chat.txt',JSON.stringify(messages))
+        await fs.promises.writeFile('data/chat.txt',JSON.stringify(messages))
 
     } catch (err) {
         console.log('no se pudo escribir el archivo ' + err)
