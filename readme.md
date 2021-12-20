@@ -20,7 +20,7 @@ Se utilizo [Git](https://git-scm.com/) para facilitar el manejo del versionado d
 
 ## Autor
 
-* **Alejandro Uribe** - *Primer desarrollo Backend* - [A Key Place](https://proyecto-final-1-coderhouse.herokuapp.com)
+* **Alejandro Uribe** - *Primer desarrollo Backend* - [eCommerce Basico](https://proyecto-final-1-coderhouse.herokuapp.com)
 
 ## Licencia
 
