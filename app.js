@@ -59,20 +59,23 @@ routerProduct.delete("/:id", mwAdmin, (req,res) => {
 //Router base /api/carrito
 //Funcionalidad extra: GET / --> obtiene el listado de carritos || usuarios y admins
 routerCart.get("/", (req, res) => {
-    let obj = req.body
+
     return res.json(cart.list)
 })
 
 //Funcionalidad a: POST / --> Crea un carrito y devuelve su id || usuarios y admins
 routerCart.post("/", (req, res) => {
     let obj = req.body
-    return res.json(cart.cartCreate(obj))
+    let create = res.json(cart.cartCreate(obj))
+    cart.write()
+    return create
 })
 
 //Funcionalidad b: DELETE /:id --> Vacia un carrito y lo elimina || usuarios y admins
 routerCart.delete("/:id", (req,res) => {
     let id = req.params.id
     let deleted = res.json(cart.delete(id))
+    cart.write()
     return(deleted)
 })
 
@@ -86,8 +89,9 @@ routerCart.get("/:id/productos", (req, res) => {
 routerCart.post("/:id/productos", (req, res) => {
     let obj = req.body
     let id = req.params.id
-    
-    return res.json(cart.cartInsert(id,obj))
+    let post = res.json(cart.cartInsert(id,obj))
+    cart.write()
+    return post
 })
 
 //Funcionalidad e: DELETE: /:id/productos/:id_prod --> Elimina un producto del carrito por su id de carrito y de producto
@@ -95,6 +99,7 @@ routerCart.delete("/:id/productos/:idprod", (req,res) => {
     let idCart = req.params.id
     let idProd = req.params.idprod
     let deleted = res.json(cart.cartDelete(idCart, idProd))
+    cart.write()
     return(deleted)
 })
 

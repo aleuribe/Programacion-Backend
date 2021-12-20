@@ -1,6 +1,6 @@
 let productos = []
 
-const ISADMIN = false
+const ISADMIN = true
 
 //Me traigo los productos con Fetch
 function fetchProducts() {
