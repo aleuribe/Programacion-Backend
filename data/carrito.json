@@ -1,0 +1,34 @@
+[
+    {
+        "id":1,
+        "timestamp":"",
+        "productos":[
+            {
+                "id":1,
+                "timestamp":"",
+                "nombre":"Harry Potter y la Piedra Filosofal",
+                "descripcion": "",
+                "codigo": "",
+                "foto":"https://planetadelibroscom.cdnstatics2.com/usuaris/libros/fotos/48/m_libros/47740_1_lostesorosdeharrypotter.jpg",
+                "precio":"220",
+                "stock":"20"
+            }
+        ]
+    },
+    {
+        "id":2,
+        "timestamp":"",
+        "productos":[
+            {
+                "id":1,
+                "timestamp":"",
+                "nombre":"Harry Puta y la Piedra Filosofal",
+                "descripcion": "",
+                "codigo": "",
+                "foto":"https://planetadelibroscom.cdnstatics2.com/usuaris/libros/fotos/48/m_libros/47740_1_lostesorosdeharrypotter.jpg",
+                "precio":"220",
+                "stock":"20"
+            }
+        ]
+    }
+]
