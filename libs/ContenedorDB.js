@@ -1,4 +1,4 @@
-const { options } = require('./options')
+
 
 
 const error = {'error':'producto no encontrado'}
@@ -29,23 +29,16 @@ class ContenedorDB {
             .finally( () => {
                 knex.destroy()
             })
-            console.log("======> base de datos cargada")
-            console.log(this.list)
 
     }
 
     async insert(obj) {
         const knex = require('knex')(this.db)
 
-        console.log("=======>Objeto a insertar")
-        console.log(obj)
-        //obj.id = ++this.id
-        //this.list.push(obj)
-
         await knex(this.table).insert(obj)
         .then( (id) => {
             console.log(`Objeto insertado en DB con id ${id}` )
-            obj.id = id
+            obj.id = id[0]
             this.list.push(obj)
         })
         .catch(err => {
@@ -70,7 +63,7 @@ class ContenedorDB {
         }
     }
 
-    update(id, obj){
+    async update(id, obj){
         const index = this.list.findIndex((objT) => objT.id == id)
 
         if(index==-1){
@@ -78,6 +71,20 @@ class ContenedorDB {
         }else{
             obj.id = this.list[index].id
             this.list[index] = obj
+
+            const knex = require('knex')(this.db)
+            console.log(`actualizando el id ${id}`)
+            await knex.from(this.table).where('id','=',id).update(obj)
+                .then( () => {
+                    console.log(`Objeto actualizado exitosamente` )
+                })
+                .catch(err => {
+                    console.log(err)
+                    throw err
+                })
+                .finally( () => {
+                    knex.destroy()
+                })
     
             return obj
         }
@@ -93,33 +100,25 @@ class ContenedorDB {
         }else{
             this.list = this.list.filter((obj) => obj.id != id)
 
+            const knex = require('knex')(this.db)
+            knex.from(this.table).where("id","=",id).del()
+                .then( () => {
+                    console.log("Object deleted")
+                })
+                .catch(err => {
+                    console.log(err)
+                    throw err
+                })
+                .finally( () => {
+                    knex.destroy()
+                })
+
+
             return this.list
         }
 
     }
 
-    async write(){
-
-
-
-        try{
-            await fs.promises.writeFile(this.filename,JSON.stringify(this.list))
-
-        } catch (err) {
-            console.log('no se pudo escribir el archivo ' + err)
-        }
-    }
 }
-
-const objeto = new ContenedorDB(options, "productos")
-
-const libro = {
-    'title':'La biblias',
-    'price':2020,
-    'thumbnail':'http://biblia.com'
-}
-console.log("===> imprmiendo libro")
-console.log(libro)
-objeto.insert(libro)
 
 module.exports = ContenedorDB

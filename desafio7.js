@@ -1,6 +1,7 @@
 const fs = require('fs')
 const express = require('express')
-const Contenedor = require('./libs/Contenedor.js')
+const Contenedor = require('./libs/ContenedorDB.js')
+const { options } = require('./libs/options')
 const {Router} = express
 const router = Router()
 
@@ -20,7 +21,7 @@ const messages = [
 app.set('views', './views')
 app.set('view engine', 'ejs')
 
-const libreria = new Contenedor(__dirname + '/data/productos.json')
+const libreria = new Contenedor(options,"productos")
 
 //Devuelve todos los productos: GET /api/productos
 router.get("/", (req, res) => {
@@ -37,7 +38,6 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
     let obj = req.body
     libreria.insert(obj)
-    libreria.write()
     return res.redirect('/')
 })
 
@@ -46,7 +46,6 @@ router.put("/:id", (req, res) => {
     let obj = req.body
     let id = req.params.id
     let put = res.json(libreria.update(id,obj))
-    libreria.write()
     return put
 })
 
@@ -54,7 +53,6 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req,res) => {
     let id = req.params.id
     let deleted = res.json(libreria.delete(id))
-    libreria.write()
     return(deleted)
 })
 
@@ -89,7 +87,6 @@ io.on("connection", (socket) => {
 
     socket.on("newProduct", data => {
         libreria.insert(data)
-        libreria.write()
         io.sockets.emit("products", data)
     })
 
