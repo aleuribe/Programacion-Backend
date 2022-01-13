@@ -1,0 +1,27 @@
+
+//Crear una base de datos llamada ecommerce
+use ecommerce
+
+//Que contenga dos colecciones: mensajes y productos
+db.createCollection("mensajes")
+db.createCollection("productos")
+
+//Agregar 10 documentos con valores distintos
+db.productos.insert([{"nombre":"El senor de los anillos","descripcion":"","codigo":"12","foto":"https://planetadelibroscom.cdnstatics2.com/usuaris/libros/fotos/210/m_libros/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.jpg","precio":"1200","stock":"10","id":1,"timestamp":1641739101230},{"nombre":"Harry Potter y la Piedra Filosofal","descripcion":"","codigo":"13","foto":"https://planetadelibroscom.cdnstatics2.com/usuaris/libros/fotos/48/m_libros/47740_1_lostesorosdeharrypotter.jpg","precio":"2200","stock":"20","id":2,"timestamp":1641739101230},{"nombre":"El patron Bitcoin","descripcion":"","codigo":"15","foto":"https://planetadelibroscom.cdnstatics2.com/usuaris/libros/fotos/344/m_libros/portada_el-patron-bitcoin_saifedean-ammous_202111181133.jpg","precio":"3000","stock":"30","id":3,"timestamp":1641739101230},{"nombre":"Ami, el niño de las estrellas","descripcion":"","codigo":"12221","foto":"https://images-na.ssl-images-amazon.com/images/I/41fQJSGOWsL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg","precio":"4750","stock":"40","id":4,"timestamp":1641739101230},{"nombre":"The Fiat Standard","descripcion":"","codigo":"1554","foto":"https://m.media-amazon.com/images/I/41ZTv9g6BxL.jpg","precio":"3500","stock":"20","timestamp":1641739101230,"id":5},{"nombre":"Arte De La Guerra Sun Tzu","descripcion":"","codigo":"1133","foto":"https://d2r9epyceweg5n.cloudfront.net/stores/328/733/products/arteguerra1-e3385b582bc292306215538838739421-640-0.jpg","precio":"1750","stock":"3","timestamp":1641739101230,"id":6},{"nombre":"Cancion de Hielo y Fuego","descripcion":"","codigo":"1254","foto":"https://images.cdn3.buscalibre.com/fit-in/360x360/4c/1a/4c1a1663350e155af145d04109b39138.jpg","precio":"950","stock":"12","timestamp":1641739101230,"id":7},{"nombre":"Los Juegos del Hambre. Balada de Pájaros Cantores y Serpientes","descripcion":"","codigo":"1255","foto":"https://images.cdn3.buscalibre.com/fit-in/360x360/0a/a3/0aa3c5b8d6ae27c1c2c5c1e138796666.jpg","precio":"435","stock":"5","timestamp":1641739101230,"id":8},{"nombre":"La Canción de Aquiles","descripcion":"","codigo":"1256","foto":"https://images.cdn3.buscalibre.com/fit-in/360x360/2f/f6/2ff68dc5f77748130fc31b863abee36a.jpg","precio":"1700","stock":"8","timestamp":1641739101230,"id":9},{"nombre":"Harry Potter y la Orden Del Fenix","descripcion":"","codigo":"1257","foto":"https://images.cdn1.buscalibre.com/fit-in/360x360/95/dd/95dd90be0b0c85b7dabc617e8262136c.jpg","precio":"2800","stock":"9","timestamp":1641739189343,"id":10}])
+
+db.mensajes.insert([{"author":"System@ofADown.com","text":"Bienvenido al server 😈","datetime":"06/06/6666, 06:06:06"},{"author":"pepe@pepe.com","text":"Hola, vamos a vender algun libro hoy?","datetime":"09/01/2022, 11:19:47"},{"author":"carlos@carlos.com","text":"Claro que si!","datetime":"09/01/2022, 11:20:00"},{"author":"juancho@juancho.com","text":"Yo no vendo nada","datetime":"09/01/2022, 11:20:12"},{"author":"pepe@pepe.com","text":"jajaja, ok ok, understood meinfreunde","datetime":"09/01/2022, 11:20:27"},{"author":"System@ofADown.com","text":"Bueno ponganse pilas","datetime":"06/06/6666, 06:06:06"},{"author":"pepe@pepe.com","text":"Pero es que juancho no quiere","datetime":"09/01/2022, 11:21:47"},{"author":"carlos@carlos.com","text":"My man","datetime":"09/01/2022, 11:22:00"},{"author":"juancho@juancho.com","text":"Bueno dele","datetime":"09/01/2022, 11:23:12"},{"author":"pepe@pepe.com","text":"jajaja, ok ok, entonces angora si","datetime":"09/01/2022, 11:24:27"}])
+
+//Listar todos los documentos de cada coleccion
+db.productos.find()
+db.mensajes.find()
+
+//Mostrar la cantidad de documentos almacenados en cada una
+db.productos.count()
+db.mensajes.count()
+
+//Realizar un CRUD
+//a. Agregar un producto mas
+db.productos.insert([{"nombre":"Otro Libro","descripcion":"","codigo":"1212","foto":"https://image.freepik.com/foto-gratis/libro-vacio-sobre-fondo-blanco-aislado-vista-arriba_32771-836.jpg","precio":"200","stock":"1","id":11,"timestamp":1641739101230}])
+
+
+
