@@ -1,6 +1,6 @@
 # Titulo del proyecto
 
-eCommerce Entrega 1 del proyecto final de Coderhouse
+eCommerce Entrega 2 del proyecto final de Coderhouse
 
 ## ¿De que se trata?
 
@@ -12,7 +12,8 @@ Esta es la primera entrega del proyecto final del curso de Backend de Coderhouse
 * [express](https://expressjs.com/es/) - Para el servicio web de la api
 * [Node.js](https://nodejs.org/es/) - Para facilitar el manejo de la paqueteria
 * [Bootstrap](https://getbootstrap.com/) - Para facilitar el user graphic interface
-* [Heroku](https://heroku.com/) - Para la implementacion online del proyecto
+* [MongoDB Atlas](https://cloud.mongodb.com) -- Para el manejo de base de datos en la nube
+* [Firebase](https://firebase.google.com) -- Para el manejo de base de datos en la nube
 
 ## Versionado
 

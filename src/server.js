@@ -1,28 +1,22 @@
-const express = require('express')
-const Products = require('./libs/Container.js')
-const Cart = require('./libs/Container.js')
-const {Router} = express
-const routerProduct = Router()
-const routerCart = Router()
+import express from 'express'
+const { Router } = express
+
+import {
+    productosDao as products,
+    carritosDao as cart
+} from '../src/dao/index.js'
 
 const app = express()
 
-const PORT = 8080
 
 const ISADMIN = true
-
-app.use(express.static('./public'))
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-
-
-const products = new Products(__dirname + '/data/productos.json')
-const cart = new Cart(__dirname + '/data/carrito.json')
 
 const errorProductoSinStock = {'error':'producto sin stock'}
 const errorProductoNoExiste = {'error':'producto no existe'}
 
 //Router base /api/productos
+const routerProduct = Router()
+
 //Funcionalidad a: GET /:id --> Devuelve un producto segun su ID || para users y admins
 routerProduct.get("/:id", (req, res) => {
     let id = req.params.id
@@ -60,6 +54,7 @@ routerProduct.delete("/:id", mwAdmin, (req,res) => {
 
 
 //Router base /api/carrito
+const routerCart = Router()
 //Funcionalidad extra: GET / --> obtiene el listado de carritos || usuarios y admins
 routerCart.get("/", (req, res) => {
 
@@ -124,14 +119,14 @@ routerCart.delete("/:id/productos/:idprod", (req,res) => {
     return(deleted)
 })
 
+//Configuracion del servidor
+
+app.use(express.static(process.env.PWD + '/public'))
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
 app.use('/api/productos', routerProduct)
 app.use('/api/carrito', routerCart)
-
-//Listening
-app.listen(process.env.PORT || PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`)
-})
 
 //Manejador de errores
 app.use(function(err,req,res,next){
@@ -160,3 +155,5 @@ function mwAdmin(req,res,next){
         res.status(500).send(error)
     }
 }
+
+export default app
