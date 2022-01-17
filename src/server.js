@@ -86,7 +86,14 @@ routerCart.delete("/:id", (req,res) => {
 //Funcionalidad c: GET /:id/productos --> Permite listar todos los productos del carrito || usuarios y admins
 routerCart.get("/:id/productos", (req, res) => {
     let id = req.params.id
-    return res.json(cart.find(id).productos)
+    let listaProductos = cart.find(id)
+    
+    if(!listaProductos.productos) {
+        return res.json(listaProductos)
+    }
+    
+    return res.json(listaProductos.productos)
+    
 })
 
 //Funcionalidad d: POST: /:id/productos --> Incorpora productos al carrito por id de carrito? || usuarios y admins

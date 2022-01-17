@@ -16,7 +16,7 @@ async function fetchAndRenderCarritos() {
     })   
 
     //Llenamos la pagina de carritos
-    carritos.forEach(function(carrito){
+    carritos.forEach(carrito => {
 
         $("#carritos").append(
             `
