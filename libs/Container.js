@@ -1,6 +1,7 @@
 const fs = require('fs')
 
-const error = {'error':'producto no encontrado'}
+const errorProducto = {'error' : 'producto no encontrado'}
+const errorCarrito = {'error' : 'carrito no encontrado'}
 
 class Contenedor {
     constructor(nombreArchivo) {
@@ -39,7 +40,7 @@ class Contenedor {
         const object = this.list.find((obj) => obj.id == id)
 
         if(!object){
-            return error
+            return errorProducto
         }else{
             return object
         }
@@ -49,7 +50,7 @@ class Contenedor {
         const index = this.list.findIndex((objT) => objT.id == id)
 
         if(index==-1){
-            return error
+            return errorProducto
         }else{
             obj.id = this.list[index].id
             this.list[index] = obj
@@ -64,7 +65,7 @@ class Contenedor {
         const object = this.list.find((obj) => obj.id == id)
 
         if(!object){
-            return error
+            return errorProducto
         }else{
             this.list = this.list.filter((obj) => obj.id != id)
 
@@ -83,7 +84,8 @@ class Contenedor {
     }
 
     //For Cart Purposes
-    cartCreate(obj){
+    cartCreate(){
+        const obj = {}
         //Buscamos el maximo index de carrito 
         const idCarts = this.list.map(obj => {
             return obj.id
@@ -98,40 +100,62 @@ class Contenedor {
         return obj.id
     }
 
+    cartDrop(id){
+
+        const object = this.list.find((obj) => obj.id == id)
+
+        if(!object){
+            return errorCarrito
+        }
+
+        this.list = this.list.filter((obj) => obj.id != id)
+        
+        return this.list
+
+    }
+
     cartInsert(cartId,obj) {
         //Buscamos el index del id del cart
-        const index = this.list.findIndex((objT) => objT.id == cartId)
+        const indexCart = this.list.findIndex((objT) => objT.id == cartId)
 
-        if(this.list[index].productos.length == 0) {
-            obj.id = 1
-        } else {
-            //Buscamos el maximo id de productos dentro del cart
-            const idProductsInCart = this.list[index].productos.map(obj => {
-                return obj.id
-            })
-            const maxIdProducts = Math.max(...idProductsInCart)
-            obj.id = maxIdProducts + 1
+        if(indexCart == -1 ) {
+            return errorCarrito
         }
-        
-        obj.timestamp = Date.now()
 
-        //Pusheamos el producto 
-        this.list[index].productos.push(obj)
+        if(obj.id == undefined) {
+            return errorProducto
+        }
 
+        //Convertimos los elementos del obj en numeros
+        obj.id = +obj.id
+        obj.cantidad = +obj.cantidad
+
+        //Buscamos el index del id del producto en el cart
+        const indexProductInCart = this.list[indexCart].productos.findIndex((objT) => objT.id == obj.id)
+
+        if(indexProductInCart != -1) {
+            this.list[indexCart].productos[indexProductInCart].cantidad += obj.cantidad
+            
+        } else {
+            obj.timestamp = Date.now()
+            //Pusheamos el producto 
+            this.list[indexCart].productos.push(obj)
+        }
         return obj
+            
     }
 
     cartDelete(cartId,prodId) {
         const cartSearch = this.list.findIndex((obj) => obj.id == cartId)
 
         if(cartSearch<0){
-            return error
+            return errorCarrito
         }
 
         const prodSearch = this.list[cartSearch].productos.findIndex((obj) => obj.id == prodId)
 
         if(prodSearch<0) {
-            return error
+            return errorCarrito
         }
 
         this.list[cartSearch].productos.splice(prodSearch, 1)

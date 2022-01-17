@@ -19,6 +19,9 @@ app.use(express.urlencoded({extended:true}))
 const products = new Products(__dirname + '/data/productos.json')
 const cart = new Cart(__dirname + '/data/carrito.json')
 
+const errorProductoSinStock = {'error':'producto sin stock'}
+const errorProductoNoExiste = {'error':'producto no existe'}
+
 //Router base /api/productos
 //Funcionalidad a: GET /:id --> Devuelve un producto segun su ID || para users y admins
 routerProduct.get("/:id", (req, res) => {
@@ -66,17 +69,23 @@ routerCart.get("/", (req, res) => {
 //Funcionalidad a: POST / --> Crea un carrito y devuelve su id || usuarios y admins
 routerCart.post("/", (req, res) => {
     let obj = req.body
-    let create = res.json(cart.cartCreate(obj))
-    cart.write()
-    return create
+    let create = cart.cartCreate()
+    if(create>0) {
+        cart.write()
+    }
+    return res.json(create)
 })
 
 //Funcionalidad b: DELETE /:id --> Vacia un carrito y lo elimina || usuarios y admins
 routerCart.delete("/:id", (req,res) => {
     let id = req.params.id
-    let deleted = res.json(cart.delete(id))
-    cart.write()
-    return(deleted)
+    let deleted = cart.cartDrop(id)
+
+    if (deleted.error == undefined) {
+        cart.write()
+    }
+
+    return(res.json(deleted))
 })
 
 //Funcionalidad c: GET /:id/productos --> Permite listar todos los productos del carrito || usuarios y admins
@@ -89,6 +98,18 @@ routerCart.get("/:id/productos", (req, res) => {
 routerCart.post("/:id/productos", (req, res) => {
     let obj = req.body
     let id = req.params.id
+
+    //Validamos si el producto tiene stock
+    const prodStock = products.find(obj.id).stock
+    
+    if(prodStock<=0 || prodStock < obj.cantidad) {
+        return res.json(errorProductoSinStock)
+    }
+    
+    if(prodStock==undefined){
+        return res.json(errorProductoNoExiste)
+    }
+
     let post = res.json(cart.cartInsert(id,obj))
     cart.write()
     return post
