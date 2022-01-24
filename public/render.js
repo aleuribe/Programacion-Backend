@@ -3,11 +3,13 @@ let libros = []
 //Render del Chat
 function render(data){
     const html = data.map((elem, index) => {
+        console.log(elem)
         return(
             `<div>
-                <strong style="color: blue"> ${elem.author}: </strong>
+                <strong style="color: blue"> ${elem.author.id}: </strong>
                 <span style="color: brown"> [${elem.datetime}] </span>
                 <em style="color: green"> ${elem.text} </em>
+                <img src="${elem.author.avatar}" class="img-thumbnail" width="30px" alt="No image">
             </div>`
         )
         }).join(' ')

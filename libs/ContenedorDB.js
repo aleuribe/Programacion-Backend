@@ -1,6 +1,3 @@
-
-
-
 const error = {'error':'producto no encontrado'}
 
 class ContenedorDB {

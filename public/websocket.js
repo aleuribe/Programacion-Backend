@@ -5,10 +5,18 @@ function sendMessage(e) {
     let datetime = new Date().toLocaleString('en-GB', {timezone: 'UTC'})
 
     const mensaje = {
-        author: $("#username").val(),
+        author: {
+            id: $("#id").val(),
+            nombre: $("#nombre").val(),
+            apellido: $("#apellido").val(),
+            edad: $("#edad").val(),
+            alias: $("#alias").val(),
+            avatar: $("#avatar").val()
+        },
         text: $("#text").val(),
         datetime: datetime
     }
+
     socket.emit('newMessage', mensaje)
     $("#text").val("")
     return false
