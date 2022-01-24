@@ -28,6 +28,8 @@ app.set('view engine', 'ejs')
 
 const libreria = new Contenedor(options,"productos")
 
+
+
 //Devuelve todos los productos: GET /api/productos
 router.get("/", (req, res) => {
     return res.json(libreria.list)
@@ -121,18 +123,6 @@ io.on("connection", (socket) => {
 
 })
 
-async function writeChatToFile(){
-    try{
-        // Normalizamos para guardar la data de esa forma y ahorrar 
-        const messagesNormalized = normalizeAndDenormalize("normalize", messages)
-
-        await fs.promises.writeFile('data/chat.json',JSON.stringify(messagesNormalized))
-
-    } catch (err) {
-        console.log('no se pudo escribir el archivo ' + err)
-    }
-}
-
 function normalizeAndDenormalize(what, obj) {
     const authorSchema = new schema.Entity("author")
     const chatSchema = new schema.Entity("mensajes", {
@@ -145,6 +135,18 @@ function normalizeAndDenormalize(what, obj) {
         return denormalize(obj.result, [chatSchema], obj.entities)
     }
     
+}
+
+async function writeChatToFile(){
+    try{
+        // Normalizamos para guardar la data de esa forma y ahorrar 
+        const messagesNormalized = normalizeAndDenormalize("normalize", messages)
+
+        await fs.promises.writeFile('data/chat.json',JSON.stringify(messagesNormalized))
+
+    } catch (err) {
+        console.log('no se pudo escribir el archivo ' + err)
+    }
 }
 
 async function readChatFromFile(){
