@@ -1,35 +1,56 @@
-const fs = require('fs')
-const faker = require('faker')
-const express = require('express')
-const Contenedor = require('./libs/ContenedorDB.js')
-const { options } = require('./libs/options')
+import Contenedor from './libs/ContenedorMongo.js'
+import DAO from './libs/DAO.js'
+import DbConfig from './libs/DbConfig.js'
+import fs from 'fs'
+import faker from 'faker'
+import express from 'express'
+import normalizr from 'normalizr'
+import {Server} from 'socket.io'
+//Sesiones Desafio 10 - imports:
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
-const normalizr = require("normalizr")
-const { Console } = require('console')
-const { normalize, denormalize, schema} = normalizr
+const PORT = 8080
 
 const {Router} = express
 const router = Router()
 
 const app = express()
 
-const PORT = 8080
+const { normalize, denormalize, schema} = normalizr
 
 app.use(express.static('./public'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+//Sesiones Desafio 10 - configuracion
+
+const advancedOptions = {useNewUrlParser:true, useUnifiedTopology:true}
+app.use(cookieParser())
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: DbConfig.mongodb.string,
+        mongoOptions: advancedOptions
+    }),
+    secret: "ThisIsASecret",
+    resave: false,
+    saveUninitialized:false,
+    cookie: {
+        maxAge: 60000
+    }
+}))
+
 const messages = []
-var normalizedSize, denormalizedSize, chatDataSaving = 0
 
 //Set template engine
 app.set('views', './views')
 app.set('view engine', 'ejs')
 
-const libreria = new Contenedor(options,"productos")
+const libreria = new Contenedor("productos",DAO.mongodb.productSchema)
 
-
-
+//****API****:
 //Devuelve todos los productos: GET /api/productos
 router.get("/", (req, res) => {
     return res.json(libreria.list)
@@ -65,10 +86,28 @@ router.delete("/:id", (req,res) => {
 
 app.use('/api/productos', router)
 
-//Main
+//****END API****:
+
+//Desafio 10: Pagina web, manejando estado de la sesion segun el estado del login
 app.get('/', (req, res) => {
-    return res.render('ejs/index', libreria)
+    if(req.session?.nombre) {
+        return res.render('ejs/index', {libreria:libreria, nombre:req.session.nombre})
+    }else{
+        return res.render('ejs/login')
+    }
+    
 })
+
+app.post('/login', (req, res) => {
+    req.session.nombre = req.body.nombre
+    res.redirect('/')
+})
+
+app.get('/logout', (req, res) => {
+    req.session.destroy()
+    return res.render('ejs/logout')
+})
+
 
 //Desafio 9: Consigna 1: /api/productos-test
 app.get("/api/productos-test", (req, res) => {
@@ -89,15 +128,13 @@ app.get("/productos-test", (req,res) => {
     return res.render('ejs/index-test')
 })
 
-
-
-//Listening
+//Server Listening
 const server = app.listen(process.env.PORT || PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`)
 })
 
-//Websocket para el chat
-const io = require('socket.io')(server)
+//Chat
+const io = new Server(server)
 
 io.on("connection", (socket) => {
     let currentTime = new Date().toLocaleTimeString()

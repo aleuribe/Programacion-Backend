@@ -33,9 +33,9 @@ function renderList(data) {
         $("#list").prepend(
             `
                 <tr>
-                    <td>${libro.title}</td>
-                    <td>${libro.price}</td>
-                    <td><img src="${libro.thumbnail}" class="img-thumbnail" width="100px" alt="No image"></td>
+                    <td>${libro.nombre}</td>
+                    <td>${libro.precio}</td>
+                    <td><img src="${libro.foto}" class="img-thumbnail" width="100px" alt="No image"></td>
             `
         )
     })

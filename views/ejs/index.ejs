@@ -1,4 +1,12 @@
 <%- include('head.ejs') %>
+    <!--Bienvenida al usuario-->
+    <div class="alert alert-primary" role="alert">
+        Bienvenido <%=nombre%>
+        <button class="btn btn-warning float-right" onclick="location.href='/logout'">
+            Salir
+        </button>
+    </div>
+
     <!--Formulario de ingreso de libros-->
     <div class="alert alert-primary" role="alert">
         Formulario de ingreso de libros
