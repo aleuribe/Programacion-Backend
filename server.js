@@ -1,3 +1,10 @@
+//Parametros Desafio 12 - imports:
+import 'dotenv/config'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { fork } from 'child_process'
+
+//Imports varios de desafios anteriores
 import Contenedor from './libs/ContenedorMongo.js'
 import DAO from './libs/DAO.js'
 import DbConfig from './libs/DbConfig.js'
@@ -6,12 +13,21 @@ import faker from 'faker'
 import express from 'express'
 import normalizr from 'normalizr'
 import {Server} from 'socket.io'
+
 //Sesiones Desafio 10 - imports:
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import { memoryUsage } from 'process'
 
-const PORT = 8080
+//Obtencion de los argumentos con Yargs
+const args = yargs(hideBin(process.argv))
+    .default({
+        port:8080
+    })
+    .parse()
+
+const PORT = args.port
 
 const {Router} = express
 const router = Router()
@@ -34,7 +50,7 @@ app.use(session({
         mongoUrl: DbConfig.mongodb.string,
         mongoOptions: advancedOptions
     }),
-    secret: "ThisIsASecret",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized:false,
     cookie: {
@@ -126,6 +142,36 @@ app.get("/api/productos-test", (req, res) => {
 
 app.get("/productos-test", (req,res) => {
     return res.render('ejs/index-test')
+})
+
+//Desafio 12: Agregando /info
+app.get("/info", (req,res) => {
+    return res.json({
+        ArgumentosEntrada: args,
+        NombrePlataforma: process.platform,
+        VersionNode: process.version,
+        MemoriaTotalReservada: memoryUsage().rss, 
+        PathEjecucion: process.cwd(),
+        ProcessID: process.pid,
+        CarpetaProyecto: process.title,
+    })
+})
+
+//Desafio 12: Agregando /api/randoms
+app.get("/api/randoms", (req,res) => {
+    const cant = req.query.cant || 100000000
+    
+    const computo = fork('./libs/randomNumber.js', [cant])
+
+    //computo.send('start')
+
+    computo.on("error", (err) => {
+        console.log(err)
+    })
+
+    computo.on('message', object => {
+        return res.json(object)
+    })
 })
 
 //Server Listening

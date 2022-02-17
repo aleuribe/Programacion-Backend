@@ -104,20 +104,7 @@ class Contenedor {
         }
 
     }
-
-    // async write(){
-    //     try{
-    //         //Dropeamos el collection
-    //         await this.coleccion.deleteMany()
-
-    //         //Ahora guardamos la lista en la base de datos
-    //         let doc = await this.coleccion.insertMany(this.list)
-
-    //     } catch (err) {
-    //         console.log('no se pudo escribir el archivo ' + err)
-    //     }
-    // }
-
+    
     //For Cart Purposes
     cartCreate(){
         const obj = {}

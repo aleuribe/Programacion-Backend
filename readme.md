@@ -1,4 +1,4 @@
-# Desafio 10 Coderhouse - Programacion Backend
+# Desafio 11 Coderhouse - Programacion Backend
 
 # Desde el desafio 9:
 ## Consigna 1:
@@ -11,5 +11,16 @@ Se reformo el formato de los mensajes del chat y se utiliza normalizr para almac
 # Desde el desafio 10:
 Se agrego un mecanismo sencillo que permite loguear un cliente por su nombre mediante un formulario de ingreso. Luego que se loguee, se muestra sobre el sitio un cartel de bienvenida con boton de logout. Al desloguearse, muestra mensaje de logout.
 
-## Nota:
-Se migro la base de datos a Mongo Atlas para mayor practicidad a la hora de probar. Adicionalmente, se modifico la logica desde el desafio 9 para que tenga mas sentido segun lo sugerido.
+# Desde el desafio 12:
+1. Mover todas las claves y credenciales utilizadas a un archivo .env y cargarlo mediante libreria dotenv. El puerto de escucha del servidor se lee usando yargs y en caso de no pasar este parametro se conecta por defecto al 8080.
+El parametro se coloca como -port XXXX.
+
+2. Agregar una ruta '/info' que presente en una vista sencilla los siguientes datos:
+- Argumentos de entrada
+- Nombre de la plataforma (SO)
+- Version de Node
+- Memoria total reservada (rss)
+- Path de ejecucion
+- Process ID
+- Carpeta del proyecto
+3. Agregar otra ruta /api/randoms que permita calcular una cantidad de numeros aleatorios del 1 al 1000 especificada por parametros query. Si el parametro no se ingresa, calcular 100.000.000 numeros. El dato devuelto al frontend sera un objeto que contendra como claves los numeros random generados junto a la cantidad de veces que salio cada uno. La ruta no sera bloqueante (fork). Comprobar el no bloqueo con 500.000.000 randoms.
