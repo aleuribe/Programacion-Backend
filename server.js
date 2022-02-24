@@ -20,6 +20,11 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import { memoryUsage } from 'process'
 
+//Desafio 13:
+import cluster from 'cluster'
+import os from 'os'
+
+
 //Obtencion de los argumentos con Yargs
 const args = yargs(hideBin(process.argv))
     .default({
@@ -153,7 +158,7 @@ app.get("/info", (req,res) => {
         MemoriaTotalReservada: memoryUsage().rss, 
         PathEjecucion: process.cwd(),
         ProcessID: process.pid,
-        CarpetaProyecto: process.title,
+        CarpetaProyecto: process.title
     })
 })
 
@@ -162,8 +167,6 @@ app.get("/api/randoms", (req,res) => {
     const cant = req.query.cant || 100000000
     
     const computo = fork('./libs/randomNumber.js', [cant])
-
-    //computo.send('start')
 
     computo.on("error", (err) => {
         console.log(err)
