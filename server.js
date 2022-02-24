@@ -20,11 +20,6 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import { memoryUsage } from 'process'
 
-//Desafio 13:
-import cluster from 'cluster'
-import os from 'os'
-
-
 //Obtencion de los argumentos con Yargs
 const args = yargs(hideBin(process.argv))
     .default({
