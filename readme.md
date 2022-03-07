@@ -61,23 +61,21 @@ Los comandos para ejecutar las consignas del desafio 13 son:
 
 Utilizando el archivo de configuración en nginx/config1:
 
-`pm2 start server.js --name clusterserver --port 8081 --mode cluster` 
+`pm2 start server.js --name="forkserver" --watch -- --PORT=8080 --MODE=FORK`
 
-`pm2 start server.js --name forkserver --port 8080 --mode fork`
+`pm2 start server.js --name="clusterserver" --watch -i max -- --PORT=8081 --MODE=CLUSTER` 
 
 ### Consigna 2
 
 Utilizando el archivo de configuración en nginx/config2:
 
-`pm2 start server.js --name server_1 --port 8080 --mode fork` 
+`pm2 start server.js --name="server_8082" --watch -- --PORT=8082 --MODE=FORK`
 
-`pm2 start server.js --name server_2 --port 8082 --mode fork`
+`pm2 start server.js --name="server_8083" --watch -- --PORT=8083 --MODE=FORK`
 
-`pm2 start server.js --name server_3 --port 8083 --mode fork`
+`pm2 start server.js --name="server_8084" --watch -- --PORT=8084 --MODE=FORK`
 
-`pm2 start server.js --name server_4 --port 8084 --mode fork`
-
-`pm2 start server.js --name server_5 --port 8085 --mode fork`
+`pm2 start server.js --name="server_8085" --watch -- --PORT=8085 --MODE=FORK`
 
 # Configuracion del .env:
 SECRET="ThisIsASecret"

@@ -20,14 +20,23 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import { memoryUsage } from 'process'
 
+
+//Cluster y fork Desafio 13 - imports:
+import os from 'os'
+import cluster from 'cluster'
+
 //Obtencion de los argumentos con Yargs
 const args = yargs(hideBin(process.argv))
     .default({
-        port:8080
+        port:8080,
+        mode:'CLUSTER'
     })
     .parse()
 
 const PORT = args.port
+const MODE = args.mode
+const numCPUs = os.cpus().length
+
 
 const {Router} = express
 const router = Router()
@@ -153,56 +162,78 @@ app.get("/info", (req,res) => {
         MemoriaTotalReservada: memoryUsage().rss, 
         PathEjecucion: process.cwd(),
         ProcessID: process.pid,
-        CarpetaProyecto: process.title
+        CarpetaProyecto: process.title,
+        NumCPUs: numCPUs
     })
 })
 
-//Desafio 12: Agregando /api/randoms
-app.get("/api/randoms", (req,res) => {
-    const cant = req.query.cant || 100000000
+
+
+//Ejecucion en modo Cluster o Fork
+if (MODE && MODE == 'CLUSTER' && cluster.isMaster) {
+    console.log(`Master ${process.pid} is running on ${PORT}`)
+
+    for(let i=0; i < numCPUs; i++) {
+        cluster.fork()
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`)
+    })
+} else {
     
-    const computo = fork('./libs/randomNumber.js', [cant])
+    //Desafio 12: Agregando /api/randoms
+    app.get("/api/randoms", (req,res) => {
+        const cant = req.query.cant || 100000000
+        
+        const computo = fork('./libs/randomNumber.js', [cant])
 
-    computo.on("error", (err) => {
-        console.log(err)
+        computo.on("error", (err) => {
+            console.log(err)
+        })
+
+        computo.on('message', object => {
+            return res.json(object)
+        })
+    })
+    
+    //Server Listening
+    const server = app.listen(process.env.PORT || PORT, () => {
+        console.log(`Servidor corriendo en puerto ${PORT}. En modo [${MODE}]`)
     })
 
-    computo.on('message', object => {
-        return res.json(object)
-    })
-})
 
-//Server Listening
-const server = app.listen(process.env.PORT || PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`)
-})
+    //Chat
+    const io = new Server(server)
 
-//Chat
-const io = new Server(server)
+    io.on("connection", (socket) => {
+        let currentTime = new Date().toLocaleTimeString()
+        console.log(`${currentTime} New user connected`)
 
-io.on("connection", (socket) => {
-    let currentTime = new Date().toLocaleTimeString()
-    console.log(`${currentTime} New user connected`)
+        readChatFromFile()
 
-    readChatFromFile()
+        socket.emit('messages', messages)
 
-    socket.emit('messages', messages)
+        //Para emitir los mensajes que llegan y sea broadcast
+        socket.on("newMessage", data => {
+            data.id = messages.length+1
+            messages.push(data)
+            io.sockets.emit("messages", messages)
 
-    //Para emitir los mensajes que llegan y sea broadcast
-    socket.on("newMessage", data => {
-        data.id = messages.length+1
-        messages.push(data)
-        io.sockets.emit("messages", messages)
+            writeChatToFile()
+        })
 
-        writeChatToFile()
+        socket.on("newProduct", data => {
+            libreria.insert(data)
+            io.sockets.emit("products", data)
+        })
+
     })
 
-    socket.on("newProduct", data => {
-        libreria.insert(data)
-        io.sockets.emit("products", data)
-    })
+    console.log(`Worker ${process.pid} started`)
+}
 
-})
+
 
 function normalizeAndDenormalize(what, obj) {
     const authorSchema = new schema.Entity("author")
