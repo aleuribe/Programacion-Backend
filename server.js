@@ -37,7 +37,6 @@ const PORT = args.port
 const MODE = args.mode
 const numCPUs = os.cpus().length
 
-
 const {Router} = express
 const router = Router()
 
@@ -232,8 +231,6 @@ if (MODE && MODE == 'CLUSTER' && cluster.isMaster) {
 
     console.log(`Worker ${process.pid} started`)
 }
-
-
 
 function normalizeAndDenormalize(what, obj) {
     const authorSchema = new schema.Entity("author")
