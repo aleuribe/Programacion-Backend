@@ -1,19 +1,26 @@
 # Titulo del proyecto
 
-eCommerce Entrega 2 del proyecto final de Coderhouse
+eCommerce Entrega 3 del proyecto final de Coderhouse
 
 ## ¿De que se trata?
 
-Esta es la segunda entrega del proyecto final del curso de Backend de Coderhouse, donde se implementaron todos los temas aprendidos hasta ahora.
+Esta es la tercera entrega del proyecto final del curso de Backend de Coderhouse, donde se implementaron todos los temas aprendidos hasta ahora.
 
 ## ¿Como se usa?
 
-Se debe definir una variable de ambiente DAO con 3 posibles valores dependiendo de la tecnologia de base de datos que desee utilizar.
-* Opcion 1: `export DAO = file` -> Esta opcion le permite utilizar la base de datos de archivos en el directorio data. Se utilizan las funciones de la libreria filesystem (fs).
+Se puede ejecutar el siguiente comando:
+`npm start` sobre el directorio del package.json y esto ejecutara el proyecto con los parametros por defecto. Esto es: mode: mongodb, run: cluster, port: 8080.
 
-* Opcion 2: `export DAO = mongodb` -> Esta opcion le permite utilizar la base de datos Mongo Atlas (en la nube) ya configurada segun los parametros del archivo config.js.
+Se puede parametrizar la ejecucion ejecutando el siguiente comando:
+`node src/main.js --dao dao_mode --mode modo_run --port puerto`
+Donde:
 
-* Opcion 3: `export DAO = firebase` -> Esta opcion le permite utilizar la opcion de base de datos Firebase ya configurada segun los parametros del archivo config.js.
+* dao_mode: file (ejecucion local al 100%) o mongodb (usando MongoDB Atlas)
+
+* modo_run: cluster o fork
+
+* port: puerto de ejecucion
+
 
 ## ¿Que herramientas se utilizaron?
 

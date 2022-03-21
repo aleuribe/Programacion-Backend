@@ -1,10 +1,11 @@
 import express from 'express'
-const { Router } = express
 
 import {
     productosDao as products,
     carritosDao as cart
 } from '../src/dao/index.js'
+
+const { Router } = express
 
 const app = express()
 
@@ -125,6 +126,27 @@ routerCart.delete("/:id/productos/:idprod", (req,res) => {
     cart.write()
     return(deleted)
 })
+
+//Desafio 10: Pagina web, manejando estado de la sesion segun el estado del login
+app.get('/', (req, res) => {
+    if(req.session?.nombre) {
+        return res.redirect('/')
+    }else{
+        return res.redirect('/login.html')
+    }
+    
+})
+
+app.post('/login', (req, res) => {
+    req.session.nombre = req.body.nombre
+    res.redirect('/')
+})
+
+app.get('/logout', (req, res) => {
+    req.session.destroy()
+    return res.render('ejs/logout')
+})
+
 
 //Configuracion del servidor
 

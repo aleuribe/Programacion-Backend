@@ -9,13 +9,6 @@ switch (process.env.DAO) {
         carritosDao = new CarritosDaoFile()
         break
     
-    case 'firebase':
-        const {default: CarritosDaoFirebase } = await import('../dao/carritos/CarritosDaoFirebase.js')
-        const {default: ProductosDaoFirebase } = await import('../dao/productos/ProductosDaoFirebase.js')
-        productosDao = new ProductosDaoFirebase()
-        carritosDao = new CarritosDaoFirebase()
-        break
-    
     case 'mongodb':
         const {default: CarritosDaoMongo } = await import('../dao/carritos/CarritosDaoMongo.js')
         const {default: ProductosDaoMongo } = await import('../dao/productos/ProductosDaoMongo.js')
