@@ -1,6 +1,6 @@
+import 'dotenv/config'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { fork } from 'child_process'
 import cluster from 'cluster'
 import os from 'os'
 

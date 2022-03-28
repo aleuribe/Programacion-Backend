@@ -21,9 +21,6 @@ class Contenedor {
 
             let listaFromFile = JSON.parse(JSON.stringify(docs))
 
-            //console.log(listaFromFile)
-
-
              for (const obj of listaFromFile) {
                  this.insert(obj)
              }

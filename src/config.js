@@ -5,7 +5,7 @@ export default {
     },
 
     mongodb: {
-        string: 'mongodb+srv://user:user123@cluster0.n3sme.mongodb.net/eCommerce',
+        string: process.env.MONGOSTRING,
         options: {
             useNewUrlParser: true,
             useUnifiedTopology: true,

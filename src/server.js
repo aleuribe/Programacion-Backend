@@ -149,8 +149,8 @@ app.use('/api/carrito', routerCart)
 
 //Twilio
 import twilio from 'twilio'
-const accountSid = 'ACadb189e2ccc883c8da2ca7ed3398df6a'
-const authToken = 'e58bb709ec5d78750341e1b1043128bf'
+const accountSid = process.env.ACCOUNTSID
+const authToken = process.env.AUTHTOKEN
 
 const client = twilio(accountSid, authToken)
 
@@ -173,8 +173,8 @@ const transporter = createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'frederic.mills76@ethereal.email',
-        pass: 'HjYDjZUnkK4gWwwdcp'
+        user: process.env.ETHEREALUSER,
+        pass: process.env.ETHEREALPASS
     }
 });
 
@@ -282,7 +282,7 @@ passport.deserializeUser((id, done) => {
 })
 
 app.use(session({
-    secret:'ale1234',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized:false,
     cookie: {
