@@ -1,6 +1,6 @@
 {
-  "type":"module",
-  "name": "proyecto-final-2",
+  "type": "module",
+  "name": "proyecto-final-3",
   "version": "1.0.0",
   "description": "",
   "main": "src/main.js",
@@ -11,8 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.2",
+    "express-session": "^1.17.2",
     "firebase-admin": "^10.0.1",
-    "mongoose": "^6.1.6"
+    "mongoose": "^6.1.6",
+    "nodemailer": "^6.7.3",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "twilio": "^3.76.0"
   }
 }

@@ -24,6 +24,7 @@ async function fetchAndRenderCarritos() {
                     Carrito # ${carrito.id}, Creado en ${Date(carrito.timestamp)}
 
                     <button onclick="deleteCart(${carrito.id})" class="btn btn-danger" value="crear">Eliminar Carrito</button>
+                    <button onclick="buyCart(${carrito.id})" class="btn btn-success" value="crear">Realizar Pedido</button>
                 </div>
 
                 <div class="container-flex">
@@ -86,6 +87,35 @@ function deleteCart(idCart){
 
 function createCart(){
     multiusageFetch(null, "POST", null, "Carrito creado exitosamente.", null)
+}
+
+function buyCart(cartId) {
+    //Armamos el array del carrito a comprar con sus detalles
+    const cart = []
+
+    carritos[cartId-1].productos.forEach(function(obj) {
+        let item = productos.find(prod => prod.id == obj.id)
+        cart.push({
+            nombre:item.nombre,
+            cantidad:obj.cantidad,
+            precio:item.precio
+        })
+    })
+
+    console.log(cart)
+
+    fetch('/buyCart', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+    },
+        body: JSON.stringify(cart)
+    }).then(res => res.json())
+    .then(res => console.log(res));
+
+    
+    //console.log(carritos[cartId-1].productos)
 }
 
 function multiusageFetch(idCart, method, obj, successMessage, idProd) {
