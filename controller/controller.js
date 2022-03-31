@@ -1,7 +1,12 @@
 import {
     productosDao as products,
     carritosDao as cart
-} from './constructor/index.js'
+} from '../service/constructor/index.js'
+
+import { passport, sendWhatsapp, sendEmail } from './passport+nodemailer+twilio.js'
+
+const errorProductoSinStock = {'error':'producto sin stock'}
+const errorProductoNoExiste = {'error':'producto no existe'}
 
 function getProductByID (req, res) {
     let id = req.params.id
@@ -113,6 +118,43 @@ function postLogin (req, res) {
     res.redirect('home.html')
 }
 
-module.exports = {
-    getProductByID, getAllProducts, postProduct, putProductByID, deleteProductByID, getAllCarts, postCart, deleteCartByID, getProductsFromCart, postProductToCartByID, deleteProductFromCartByID, getLogin, postLogin
+function getRegister (req, res) {
+    res.redirect('register.html')
+}
+
+function postBuyCart (req, res) {
+    const buyCart = req.body
+
+    const messageNewBuy = `Nuevo pedido de ${req.user.name} ${req.user.username}` 
+    
+    sendEmail(buyCart, messageNewBuy)
+    sendWhatsapp(messageNewBuy)    
+
+    res.send({'mensaje':'compra exitosa'})
+}
+
+function postRegister (req, res) {
+    res.redirect('login.html')
+}
+
+function getIndex (req, res) {
+    res.redirect('/home.html')
+}
+
+function getLogout (req, res) {
+    req.session.destroy(function (err) {
+        res.redirect('logout.html');
+      });
+}
+
+function checkAuth(req, res, next) {
+    if(req.isAuthenticated()) {
+        next()
+    } else {
+        res.redirect('/index.html')
+    }
+}
+
+export {
+    getProductByID, getAllProducts, postProduct, putProductByID, deleteProductByID, getAllCarts, postCart, deleteCartByID, getProductsFromCart, postProductToCartByID, deleteProductFromCartByID, getLogin, postLogin, getRegister, postBuyCart, postRegister, getIndex, getLogout, checkAuth, passport
 }

@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import {getProductByID, getAllProducts, postProduct, putProductByID, deleteProductByID, getAllCarts, postCart, getProductsFromCart, postProductToCartByID, deleteProductFromCartByID} from '../controller/controller.js'
+import { getProductByID, getAllProducts, postProduct, putProductByID, deleteProductByID, getAllCarts, postCart, deleteCartByID, getProductsFromCart, postProductToCartByID, deleteProductFromCartByID, getLogin, postLogin, getRegister, postBuyCart, postRegister, getIndex, getLogout, checkAuth} from '../controller/controller.js'
 
-const errorProductoSinStock = {'error':'producto sin stock'}
-const errorProductoNoExiste = {'error':'producto no existe'}
+import { passport } from '../controller/passport+nodemailer+twilio.js'
+
 
 const ISADMIN = true
 
@@ -47,66 +47,28 @@ routerCart.delete("/:id/productos/:idprod", checkAuth, deleteProductFromCartByID
 ///RUTAS LOGIN
 const routerBase = new Router()
 
-routerBase.get('/login', (req, res) => {
-    if(req.isAuthenticated()) {
-        var user = req.user
-        console.log("Usuario logueado")
-        
-        res.send('login-ok')
-    }else{
+routerBase.get('/login', getLogin)
 
-        res.redirect('/login.html')
-    }
-})
+routerBase.post('/login', passport.authenticate('login'), postLogin)
 
-routerBase.post('/login', passport.authenticate('login'), (req, res) => {
+routerBase.get('/register', getRegister)
 
-    res.redirect('home.html')
-})
+routerBase.post('/buyCart', postBuyCart)
 
-routerBase.get('/register', (req, res) => {
-    res.redirect('register.html')
-})
+routerBase.post('/register', passport.authenticate('signup'), postRegister)
 
-routerBase.post('/buyCart', (req, res) => {
+routerBase.get('/index.html', checkAuth, getIndex)
 
-    const buyCart = req.body
-
-    const messageNewBuy = `Nuevo pedido de ${req.user.name} ${req.user.username}` 
-    
-    sendEmail(buyCart, messageNewBuy)
-    sendWhatsapp(messageNewBuy)    
-
-    res.send({'mensaje':'compra exitosa'})
-})
-
-routerBase.post('/register', passport.authenticate('signup'), (req, res) => {
-
-    res.redirect('login.html')
-})
-
-routerBase.get('/index.html', checkAuth, (req, res) => {
-
-    res.redirect('/home.html')
-})
-
-routerBase.get('/logout', (req, res) => {
-    req.session.destroy(function (err) {
-        res.redirect('logout.html');
-      });
-})
+routerBase.get('/logout', getLogout)
 
 
 ///END RUTAs
 
 
-function checkAuth(req, res, next) {
-    if(req.isAuthenticated()) {
-        next()
-    } else {
-        res.redirect('/index.html')
-    }
-}
+
+
+
+
 
 //Middleware de seguridad
 function mwAdmin(req,res,next){
@@ -121,8 +83,6 @@ function mwAdmin(req,res,next){
     }
 }
 
-
-
-module.exports = {
-    routerProduct, routerCart, routerBase
+export {
+    routerProduct, routerCart, routerBase, passport
 }
