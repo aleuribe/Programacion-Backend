@@ -60,16 +60,16 @@ Este proyecto esta licenciado bajo la MIT License
 * Al equipo de Coderhouse
 
 # Configuracion del .env:
-SECRET='ale1234'
-MONGOSTRING="mongodb+srv://user:user123@cluster0.n3sme.mongodb.net/eCommerce"
-ACCOUNTSID='ACadb189e2ccc883c8da2ca7ed3398df6a'
-AUTHTOKEN='c80de9a3bedd08a80c622eab64f1ec49'
-ETHEREALUSER="frederic.mills76@ethereal.email"
-ETHEREALPASS="HjYDjZUnkK4gWwwdcp"
+SECRET=ale1234
+MONGOSTRING=mongodb+srv://user:user123@cluster0.n3sme.mongodb.net/eCommerce
+ACCOUNTSID=ACadb189e2ccc883c8da2ca7ed3398df6a
+AUTHTOKEN=c80de9a3bedd08a80c622eab64f1ec49
+ETHEREALUSER=frederic.mills76@ethereal.email
+ETHEREALPASS=HjYDjZUnkK4gWwwdcp
 
 SECRET={check readme.md}
-mongostring={check readme.md}
-accountSid={check readme.md}
-authToken={check readme.md}
-EtherealUser={check readme.md}
-EtherealPass={check readme.md}
+MONGOSTRING={check readme.md}
+ACCOUNTSID={check readme.md}
+AUTHTOKEN={check readme.md}
+ETHEREALUSER={check readme.md}
+ETHEREALPASS={check readme.md}

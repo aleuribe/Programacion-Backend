@@ -1,4 +1,4 @@
-import Contenedor from '../../containers/ContenedorFile.js'
+import Contenedor from '../../../model/ContenedorFile.js'
 
 class CarritosDaoFile extends Contenedor {
     constructor() {

@@ -18,7 +18,7 @@ process.env.PORT = args.port
 
 const numCPUs = os.cpus().length
 
-import app from '../src/server.js'
+import app from './service/server.js'
 
 if (process.env.MODE && process.env.MODE == 'CLUSTER' && cluster.isMaster) {
     console.log(`Master ${process.pid} is running on ${process.env.PORT}`)

@@ -1,36 +1,42 @@
-import fs from 'fs'
-import config from '../config.js'
+import mongoose from 'mongoose'
+import config from '../model/config.js'
+
+await mongoose.connect(config.mongodb.string, config.mongodb.options)
+    .then(() => console.log("Database connected!"))
+    .catch(err => console.log(err));
 
 const errorProducto = {'error' : 'producto no encontrado'}
 const errorCarrito = {'error' : 'carrito no encontrado'}
 
 class Contenedor {
-    constructor(nombreArchivo) {
+    constructor(nombreColeccion, esquema) {
+        this.coleccion = mongoose.model(nombreColeccion, esquema)
         this.id = 0
         this.list = []
-        this.filename = `${config.filesystem.path}/${nombreArchivo}`
         this.init()
     }
 
-    init(){
+    async init(){
         try{
-            const data = fs.readFileSync(this.filename)
+            
+            let docs = await this.coleccion.find({}, {_v:0, _id:0}).lean()
 
-            const listaFromFile = JSON.parse(data)
+            let listaFromFile = JSON.parse(JSON.stringify(docs))
 
-            for (const obj of listaFromFile) {
-                this.insert(obj)
-            }
+             for (const obj of listaFromFile) {
+                 this.insert(obj)
+             }
 
-            //Buscamos el id mas alto para inicializar el this.id
-            const listId = this.list.map(obj => {
-                return obj.id
-            })
-            const maxId = Math.max(...listId)
-            this.id=maxId
+            // Buscamos el id mas alto para inicializar el this.id
+             const listId = this.list.map(obj => {
+                 return obj.id
+             })
+
+             const maxId = Math.max(...listId)
+             this.id=maxId
 
         } catch(err) {
-            console.log("Error al acceder al archivo.")
+            console.log("Error al acceder a la base de datos.")
         }
     }
 
@@ -83,7 +89,11 @@ class Contenedor {
 
     async write(){
         try{
-            await fs.promises.writeFile(this.filename,JSON.stringify(this.list))
+            //Dropeamos el collection
+            await this.coleccion.deleteMany()
+
+            //Ahora guardamos la lista en la base de datos
+            let doc = await this.coleccion.insertMany(this.list)
 
         } catch (err) {
             console.log('no se pudo escribir el archivo ' + err)
@@ -93,16 +103,18 @@ class Contenedor {
     //For Cart Purposes
     cartCreate(){
         const obj = {}
+
         //Buscamos el maximo index de carrito 
         const idCarts = this.list.map(obj => {
             return obj.id
         })
-        const maxIdCarts = Math.max(...idCarts)
+
+        let maxIdCarts = Math.max(...idCarts)
 
         if(maxIdCarts<0) {
             maxIdCarts = 0
         }
-
+        
         obj.id = maxIdCarts + 1
         obj.timestamp = Date.now()
         obj.productos= []
